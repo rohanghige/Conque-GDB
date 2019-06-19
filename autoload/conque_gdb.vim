@@ -426,7 +426,11 @@ function! conque_gdb#open(...)
             return
         endif
 
-        let l:gdb_cmd = s:gdb_command . l:extra . l:user_args
+        if (exists('g:ConqueGdb_startup_args') && g:ConqueGdb_startup_args != '')
+          let l:gdb_cmd = s:gdb_command . l:extra . g:ConqueGdb_startup_args . " " . l:user_args
+        else
+          let l:gdb_cmd = s:gdb_command . l:extra . l:user_args
+        endif
         let s:is_gdb_startup = 1
         try
             let s:gdb = conque_term#open(l:gdb_cmd, l:start_cmds, get(a:000, 2, 0), get(a:000, 3, 1), s:term_object)
